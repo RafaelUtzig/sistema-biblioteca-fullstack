@@ -4,6 +4,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 $logado = !empty($_SESSION['usuario_id']);
 $titulo = $titulo ?? 'Biblioteca';
+$paginaAtual = basename($_SERVER['PHP_SELF'] ?? '');
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -16,27 +17,55 @@ $titulo = $titulo ?? 'Biblioteca';
 </head>
 <body class="d-flex flex-column min-vh-100 bg-light">
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
   <div class="container">
-    <a class="navbar-brand" href="/biblioteca/index.html"><i class="bi bi-book"></i> Biblioteca</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
+    <a class="navbar-brand fw-semibold" href="index.html"><i class="bi bi-book"></i> Biblioteca</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu" aria-controls="menu" aria-expanded="false" aria-label="Alternar navegação">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="menu">
       <ul class="navbar-nav me-auto">
         <?php if ($logado): ?>
-          <li class="nav-item"><a class="nav-link" href="/biblioteca/painel.php">Painel</a></li>
-          <li class="nav-item"><a class="nav-link" href="/biblioteca/livros/">Livros</a></li>
-          <li class="nav-item"><a class="nav-link" href="/biblioteca/categorias/">Categorias</a></li>
+          <li class="nav-item">
+            <a class="nav-link <?= $paginaAtual === 'painel.php' ? 'active fw-semibold' : '' ?>" href="painel.php">
+              <i class="bi bi-speedometer2"></i> Painel
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link <?= $paginaAtual === 'livros.php' ? 'active fw-semibold' : '' ?>" href="livros.php">
+              <i class="bi bi-book"></i> Livros
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link <?= $paginaAtual === 'categorias.php' ? 'active fw-semibold' : '' ?>" href="categorias.php">
+              <i class="bi bi-tags"></i> Categorias
+            </a>
+          </li>
+        <?php else: ?>
+          <li class="nav-item">
+            <a class="nav-link" href="index.html"><i class="bi bi-house"></i> Início</a>
+          </li>
         <?php endif; ?>
       </ul>
-      <ul class="navbar-nav">
+      <ul class="navbar-nav align-items-lg-center">
         <?php if ($logado): ?>
-          <li class="nav-item"><span class="navbar-text me-3">Olá, <?= htmlspecialchars($_SESSION['usuario_nome']) ?></span></li>
-          <li class="nav-item"><a class="btn btn-outline-light btn-sm" href="/biblioteca/logout.php">Sair</a></li>
+          <li class="nav-item">
+            <span class="navbar-text text-white me-lg-3">
+              <i class="bi bi-person-circle"></i> Olá, <?= htmlspecialchars($_SESSION['usuario_nome'] ?? 'Usuário') ?>
+            </span>
+          </li>
+          <li class="nav-item mt-2 mt-lg-0">
+            <a class="btn btn-outline-light btn-sm" href="logout.php">
+              <i class="bi bi-box-arrow-right"></i> Sair
+            </a>
+          </li>
         <?php else: ?>
-          <li class="nav-item"><a class="nav-link" href="/biblioteca/login.php">Entrar</a></li>
-          <li class="nav-item"><a class="nav-link" href="/biblioteca/cadastro.php">Cadastrar-se</a></li>
+          <li class="nav-item">
+            <a class="nav-link <?= $paginaAtual === 'login.php' ? 'active fw-semibold' : '' ?>" href="login.php">Entrar</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link <?= $paginaAtual === 'cadastro.php' ? 'active fw-semibold' : '' ?>" href="cadastro.php">Cadastrar-se</a>
+          </li>
         <?php endif; ?>
       </ul>
     </div>
